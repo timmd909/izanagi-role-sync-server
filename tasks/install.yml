@@ -1,0 +1,6 @@
+---
+
+- name: Install Syncthing APT keys
+  apt_key:
+    url: https://syncthing.net/release-key.txt
+    state: present

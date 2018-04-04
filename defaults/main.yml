@@ -1,0 +1,5 @@
+---
+
+# The user that can be SSH'd into with `sudo` privileges
+# Inspired by http://www.onmarkproductions.com/html/kokuzo.shtml
+sync_server_ssh_user: kokuzo
