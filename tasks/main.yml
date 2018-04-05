@@ -3,3 +3,7 @@
 - include: "install.yml"
   become: yes
   become_user: root
+
+- include: "configure.yml"
+  become: yes
+  become_user: root

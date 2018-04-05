@@ -4,3 +4,4 @@
 # Inspired by http://www.onmarkproductions.com/html/kokuzo.shtml
 sync_server_user: kokuzo
 sync_server_home: /opt/SyncThing
+sync_server_hostname: kiroku
