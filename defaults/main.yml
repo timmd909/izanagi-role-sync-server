@@ -1,5 +1,6 @@
 ---
 
-# The user that can be SSH'd into with `sudo` privileges
+# The user that all SyncThing related processes will run under
 # Inspired by http://www.onmarkproductions.com/html/kokuzo.shtml
-sync_server_ssh_user: kokuzo
+sync_server_user: kokuzo
+sync_server_home: /opt/SyncThing
