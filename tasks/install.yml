@@ -1,9 +1,11 @@
 ---
 
 - name: Install SyncThing APT keys
-  apt_key:
-    url: https://syncthing.net/release-key.txt
-    state: present
+  shell: curl -s https://syncthing.net/release-key.txt | apt-key add -
+  # Having trouble w/ this on a Ubuntu 14.04 virtual machine:
+  # apt_key:
+  #   url: https://syncthing.net/release-key.txt
+  #   state: present
 
 - name: Add SyncThing stable channel
   lineinfile:
@@ -14,7 +16,9 @@
     state: present
 
 - name: Update APT after adding SyncThing channel
-  apt: update_cache=yes cache_valid_time=3600
+  shell: apt-get update
+  # Having trouble w/ this on a Ubuntu 14.04 virtual machine:
+  # apt: update_cache=yes cache_valid_time=0
 
 - name: Install SyncThing
   apt: name=syncthing state=latest
