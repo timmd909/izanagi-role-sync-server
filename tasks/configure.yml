@@ -27,10 +27,18 @@
     user: "{{ sync_server_user }}"
     state: present
 
-- name: Create sync server home
+- name: Create sync directory
   file:
-    path: "{{ sync_server_home }}"
+    path: "{{ sync_server_dir }}"
     state: directory
     owner: "{{ sync_server_user }}"
     mode: 0775
     group: "{{ sync_server_group }}"
+
+- name: Add fstab entry for external USB drive
+  when: sync_server_external_drive_enabled
+  lineinfile:
+    path: /etc/fstab
+    regexp: '\# EXTERNAL DRIVE$'
+    line: "{{ sync_server_external_partition }} {{ sync_server_dir }} {{ sync_server_external_file_system }} noexec,user,sync,rw,nofail 0 0 # EXTERNAL DRIVE"
+    state: present
