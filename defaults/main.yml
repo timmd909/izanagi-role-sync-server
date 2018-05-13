@@ -3,5 +3,13 @@
 # The user that all SyncThing related processes will run under
 # Inspired by http://www.onmarkproductions.com/html/kokuzo.shtml
 sync_server_user: kokuzo
-sync_server_home: /opt/SyncThing
+sync_server_group: "{{ sync_server_user }}"
+sync_server_home: /srv/sync
 sync_server_hostname: kiroku
+
+# Set to true to use an external hard drive for syncing, then
+# update the variables below as necessary:
+sync_server_external_drive_enabled: false
+# You can either use a partition or a UUID
+# sync_server_external_partition: /dev/sda1
+# sync_server_external_partition: 00000000-0000-0000-0000-000000000000

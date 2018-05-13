@@ -13,3 +13,24 @@
     src: etc/hosts.j2
     dest: /etc/hosts
     mode: 0644
+
+- name: Add sync group
+  group:
+    name: "{{ sync_server_group }}"
+    state: present
+
+- name: Add sync user
+  user:
+    create_home: yes
+    group: "{{ sync_server_group }}"
+    home: "/home/{{ sync_server_user }}"
+    user: "{{ sync_server_user }}"
+    state: present
+
+- name: Create sync server home
+  file:
+    path: "{{ sync_server_home }}"
+    state: directory
+    owner: "{{ sync_server_user }}"
+    mode: 0775
+    group: "{{ sync_server_group }}"
