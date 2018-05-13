@@ -1,19 +1,5 @@
 ---
 
-- name: Update hostname
-  shell: hostname {{ sync_server_hostname }}
-
-- name: Update /etc/hostname
-  copy:
-    content: "{{ sync_server_hostname }}\n"
-    dest: /etc/hostname
-
-- name: Update /etc/hosts
-  template:
-    src: etc/hosts.j2
-    dest: /etc/hosts
-    mode: 0644
-
 - name: Add sync group
   group:
     name: "{{ sync_server_group }}"

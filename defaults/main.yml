@@ -5,7 +5,6 @@
 sync_server_user: kokuzo
 sync_server_group: "{{ sync_server_user }}"
 sync_server_dir: /srv/sync
-sync_server_hostname: kiroku
 
 # Set to true to use an external hard drive for syncing, then
 # update the variables below as necessary:
