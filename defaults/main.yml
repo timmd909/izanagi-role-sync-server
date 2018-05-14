@@ -1,14 +1,14 @@
 ---
 
+# Set to false to  disable configuration of syncthing as a system service
+sync_server_service: true
+
 # The user that all SyncThing related processes will run under
 # Inspired by http://www.onmarkproductions.com/html/kokuzo.shtml
 sync_server_user: kokuzo
 sync_server_password: "{{ 'your-password-here' | password_hash('sha512') }}"
 sync_server_group: "{{ sync_server_user }}"
 sync_server_dir: /srv/sync
-
-# Set to false to disable the init scripts automatically starting syncing
-sync_server_service: true
 
 # Set to true to use an external hard drive for syncing, then
 # update the variables below as necessary:
