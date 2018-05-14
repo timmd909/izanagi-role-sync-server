@@ -7,6 +7,9 @@ sync_server_password: "{{ 'your-password-here' | password_hash('sha512') }}"
 sync_server_group: "{{ sync_server_user }}"
 sync_server_dir: /srv/sync
 
+# Set to false to disable the init scripts automatically starting syncing
+sync_server_service: true
+
 # Set to true to use an external hard drive for syncing, then
 # update the variables below as necessary:
 sync_server_external_drive_enabled: false
