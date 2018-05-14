@@ -7,13 +7,18 @@
 
 - name: Add sync user
   user:
-    create_home: yes
-    group: "{{ sync_server_group }}"
-    home: "/home/{{ sync_server_user }}"
-    user: "{{ sync_server_user }}"
     state: present
+    # basic
+    user: "{{ sync_server_user }}"
+    group: "{{ sync_server_group }}"
+    shell: "/bin/bash"
+    password: "{{ sync_server_password }}"
+    update_password: always
+    # home related
+    create_home: yes
+    home: "{{ sync_server_dir }}"
 
-- name: Create sync directory
+- name: Setup sync home directory
   file:
     path: "{{ sync_server_dir }}"
     state: directory
@@ -28,3 +33,26 @@
     regexp: '\# EXTERNAL DRIVE$'
     line: "{{ sync_server_external_partition }} {{ sync_server_dir }} {{ sync_server_external_file_system }} noexec,user,sync,rw,nofail 0 0 # EXTERNAL DRIVE"
     state: present
+
+#
+# I will never leave behind my SysV old school hacky roots for init
+# scripts. I hate SystemD being forced on the innocent community.
+#
+- name: Install init service
+  template:
+    src: etc/init.d/syncthing.j2
+    dest: /etc/init.d/syncthing
+    owner: root
+    group: root
+    mode: 0755
+
+- name: Enable syncthing service
+  file:
+    state: link
+    src: /etc/init.d/syncthing
+    path: "/etc/rc{{ item }}.d/S99syncthing"
+  with_items:
+    - 2
+    - 3
+    - 4
+    - 5

@@ -3,6 +3,7 @@
 # The user that all SyncThing related processes will run under
 # Inspired by http://www.onmarkproductions.com/html/kokuzo.shtml
 sync_server_user: kokuzo
+sync_server_password: "{{ 'your-password-here' | password_hash('sha512') }}"
 sync_server_group: "{{ sync_server_user }}"
 sync_server_dir: /srv/sync
 

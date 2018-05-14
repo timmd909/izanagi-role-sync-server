@@ -1,0 +1,69 @@
+#!/bin/sh -e
+### BEGIN INIT INFO
+# Provides:
+# Required-Start: $local_fs $network
+# Required-Stop: 0 1 6
+# Should-Start:
+# Should-Stop:
+# Default-Start: 2 3 4 S
+# Default-Stop:
+# Short-Description: Start SyncThing
+# Description: Start SyncThing server for configured users
+### END INIT INFO
+
+USERS="{{ sync_server_user }}"
+SYNCTHING="/usr/bin/syncthing"
+SYNCTHING_OPTIONS="-no-browser"
+
+start_daemon()
+{
+  for USER in $USERS; do
+    echo "Starting syncthing for $USER"
+    start-stop-daemon --chuid $USER --start --background --user $USER --exec $SYNCTHING -- $SYNCTHING_OPTIONS
+  done
+}
+
+stop_daemon()
+{
+  for USER in $USERS; do
+    daemon_pid=$(pgrep -fu $USER $SYNCTHING)
+    if [ ! -z "$daemon_pid" ]; then
+      echo "Stopping syncthing for $USER"
+      start-stop-daemon --chuid $USER --stop --user $USER --exec $SYNCTHING
+    fi
+  done
+}
+
+daemon_status()
+{
+  for USER in $USERS; do
+    daemon_pid=$(pgrep -fu $USER $SYNCTHING)
+    if [ ! -z "$daemon_pid"]; then
+      echo "SyncThing for $USER is running (PID: $daemon_pid)"
+    else
+      echo "SyncThing for $USER is *NOT* running"
+    fi
+  done
+}
+
+case "$1" in
+  start)
+    start_daemon
+    ;;
+  stop)
+    stop_daemon
+    ;;
+  restart)
+    stop_daemon
+    sleep 2s
+    start daemon
+    ;;
+  status)
+    daemon_status
+    ;;
+  *)
+    echo "Usage: $1 {start|stop|restart|status}"
+    exit 86
+esac
+
+exit 0
