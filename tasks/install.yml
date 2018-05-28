@@ -1,5 +1,8 @@
 ---
 
+- name: Add encfs
+  apt: name=encfs state=latest
+
 - name: Install SyncThing APT keys
   shell: curl -s https://syncthing.net/release-key.txt | apt-key add -
   # Having trouble w/ this on a Ubuntu 14.04 virtual machine:
