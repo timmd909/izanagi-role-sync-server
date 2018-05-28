@@ -39,7 +39,6 @@
 # scripts. I hate SystemD being forced on the innocent community.
 #
 - name: Install init service
-  when: sync_server_service
   template:
     src: etc/init.d/syncthing.j2
     dest: /etc/init.d/syncthing
@@ -48,8 +47,21 @@
     mode: 0755
 
 - name: Enable syncthing service
+  when: sync_server_service
   file:
     state: link
+    src: /etc/init.d/syncthing
+    path: "/etc/rc{{ item }}.d/S99syncthing"
+  with_items:
+    - 2
+    - 3
+    - 4
+    - 5
+
+- name: Disable syncthing service
+  when: sync_server_service == false
+  file:
+    state: absent
     src: /etc/init.d/syncthing
     path: "/etc/rc{{ item }}.d/S99syncthing"
   with_items:
