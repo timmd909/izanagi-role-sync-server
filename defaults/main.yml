@@ -16,3 +16,14 @@ sync_server_external_drive_enabled: false
 # You can either use a partition or a UUID
 # sync_server_external_partition: /dev/sda1
 # sync_server_external_partition: PARTUUID=00000000-0000-0000-0000-000000000000
+
+#
+# eCryptFs - useful for syncing protected data
+#
+sync_server_ecrypt_enabled: false
+sync_server_ecrypt_encrypted_path: /srv/.crypt/
+sync_server_ecrypt_decrypted_path: /srv/crypt/
+sync_server_ecrypt_password: change-me
+sync_server_ecrypt_password_file: /root/.ecryptfs/password
+# Make sure to change this in your own servers!
+sync_server_ecrypt_sig: 5c116acdf1d0dd89

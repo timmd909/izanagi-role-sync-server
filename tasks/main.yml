@@ -8,3 +8,9 @@
   when: sync_server_service
   become: yes
   become_user: root
+
+- include: "ecrypt.yml"
+  when: sync_server_service
+  become: yes
+  become_user: root
+  when: sync_server_ecrypt_enabled

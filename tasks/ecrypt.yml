@@ -1,0 +1,55 @@
+---
+
+- name: Install ecryptfs
+  apt: name=ecryptfs-utils state=latest
+
+- name: Create crypt root directories
+  file:
+    path: "{{ item }}"
+    state: directory
+    owner: "{{ sync_server_group }}"
+    group: "{{ sync_server_group }}"
+  with_items:
+    - "{{ sync_server_ecrypt_encrypted_path }}"
+    - "{{ sync_server_ecrypt_decrypted_path }}"
+
+- name: Create ecryptfs cache direcotyr
+  file:
+    path: "/root/.ecryptfs/"
+    state: directory
+    owner: root
+    group: root
+
+- name: Add sig to cache
+  lineinfile:
+    create: yes
+    dest: /root/.ecryptfs/sig-cache.txt
+    line: "{{ sync_server_ecrypt_sig }}"
+
+- name: Create password file
+  lineinfile:
+    create: yes
+    dest: "{{ sync_server_ecrypt_password_file }}"
+    line: "passphrase_passwd={{ sync_server_ecrypt_password }}"
+
+- name: Configure ecryptfs
+  template:
+    src: root/.ecryptfsrc.j2
+    dest: /root/.ecryptfsrc
+    mode: 0600
+
+- name: Automatically mount encrypted filename at boot
+  lineinfile:
+    dest: /etc/fstab
+    regexp: ".*ecryptfs.*"
+    # line: "{{ sync_server_ecrypt_encrypted_path }} {{ sync_server_ecrypt_decrypted_path }} ecryptfs rw,relatime,ecryptfs_sig={{ sync_server_ecrypt_sig }},ecryptfs_fnek_sig={{ sync_server_ecrypt_sig }},ecryptfs_cipher=aes,ecryptfs_key_bytes=16,ecryptfs_unlink_sigs,ecryptfs_enable_filename_crypto 0 0"
+    line: "{{ sync_server_ecrypt_encrypted_path }} {{ sync_server_ecrypt_decrypted_path }} ecryptfs defaults 0 0"
+
+- name: Allow sync user to always read everything in the crypt
+  acl:
+    name: "{{ sync_server_ecrypt_encrypted_path }}"
+    entity: "{{ sync_server_user }}"
+    recursive: yes
+    state: present
+    permissions: rx
+    etype: user
